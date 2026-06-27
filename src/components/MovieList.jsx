@@ -1,78 +1,54 @@
-import { useState, useEffect } from "react";
-
-// 1. PROP: Receive the 'searchTerm' from Home.jsx
-function MovieList({ searchTerm }) {
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null); // New Error State
-
-  useEffect(() => {
-    // Basic UX: Don't search if the user hasn't typed at least 3 letters
-    if (searchTerm.length < 3) {
-      setMovies([]);
-      setError(null);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null); // Clear old errors when a new search starts
-
-    // 2. DYNAMIC FETCH: Notice ${searchTerm} inside the URL!
-    fetch(`https://www.omdbapi.com/?s=${searchTerm}&apikey=acd3541e`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.Response === "True") {
-          setMovies(data.Search);
-        } else {
-          setMovies([]); // OMDB found no movies
-        }
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching data: ", err);
-        setError("Failed to fetch movies. Please check your internet connection.");
-        setIsLoading(false);
-      });
-  }, [searchTerm]); // 3. 🔥 THE TRIGGER: Run this fetch every time 'searchTerm' changes
-
-  // ==========================================
+// ==========================================
   // 4. EXPLICIT UI STATES (Startup Level UX)
   // ==========================================
 
   if (searchTerm.length < 3) {
-    return <div className="text-center text-slate-400 text-xl mt-10">Type at least 3 letters to search...</div>;
+    return (
+      <div className="text-center text-slate-400 mt-10">
+        <p className="text-4xl mb-2">⌨️</p>
+        <p className="text-xl">Type at least 3 letters to search...</p>
+      </div>
+    );
   }
 
+  // TASK 1: Skeleton Loading UI
   if (isLoading) {
-    return <div className="text-center text-indigo-400 text-xl mt-10 animate-pulse">Searching OMDB Database...</div>;
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-pulse">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <div key={index} className="bg-slate-800 rounded-xl h-[400px]" />
+        ))}
+      </div>
+    );
   }
 
+  // TASK 3: Upgraded Error State with Retry Button
   if (error) {
-    return <div className="text-center text-red-400 text-xl mt-10 bg-red-900/20 py-4 rounded-lg">{error}</div>;
+    return (
+      <div className="text-center mt-10 bg-red-900/20 p-8 rounded-xl border border-red-900/50">
+        <p className="text-4xl mb-4">⚠️</p>
+        <p className="text-red-400 text-xl">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-6 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white font-semibold transition"
+        >
+          Try Again
+        </button>
+      </div>
+    );
   }
 
+  // TASK 2: Upgraded Empty State
   if (movies.length === 0) {
-    return <div className="text-center text-slate-400 text-xl mt-10">No movies found matching "{searchTerm}".</div>;
+    return (
+      <div className="text-center mt-16">
+        <p className="text-5xl mb-4">🎬❌</p>
+        <p className="text-slate-300 text-2xl font-semibold">
+          No movies found for "{searchTerm}"
+        </p>
+        <p className="text-slate-500 text-lg mt-2">
+          Check for typos or try searching a broader term like "Batman".
+        </p>
+      </div>
+    );
   }
-
-  // If no errors, no loading, and we have movies, render the grid!
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {movies.map((movie) => (
-        <div key={movie.imdbID} className="bg-slate-800 rounded-xl overflow-hidden shadow-xl border border-slate-700 transition hover:border-indigo-500 hover:-translate-y-1">
-          <img 
-            src={movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/300x450?text=No+Poster"} 
-            alt={movie.Title} 
-            className="w-full h-80 object-cover"
-          />
-          <div className="p-4">
-            <h3 className="text-lg font-bold truncate text-slate-100">{movie.Title}</h3>
-            <p className="text-indigo-400 text-sm mt-1">{movie.Year}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export default MovieList;

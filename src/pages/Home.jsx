@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MovieList from "../components/MovieList";
 
 function Home() {
-  // 1. STATE: We hold the user's typed search word here.
   const [searchTerm, setSearchTerm] = useState("batman");
+  const [query, setQuery] = useState("batman"); // The debounced word
+
+  // The Debounce Magic: Only update the 'query' after 500ms of no typing
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setQuery(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   return (
     <div className="min-h-screen bg-slate-900 text-white p-8 font-sans">
@@ -12,7 +21,6 @@ function Home() {
           🎬 Movie Engine
         </h1>
         
-        {/* 2. THE INPUT: Updates 'searchTerm' every time a key is pressed */}
         <input
           type="text"
           placeholder="Search movies (e.g., Avengers, Inception)..."
@@ -21,8 +29,8 @@ function Home() {
           className="w-full mb-8 px-6 py-3 rounded-xl bg-slate-800 border border-slate-700 focus:outline-none focus:border-indigo-500 text-lg transition-colors shadow-lg text-white"
         />
 
-        {/* 3. THE PROP: We pass the search word down to the brain */}
-        <MovieList searchTerm={searchTerm} />
+        {/* Notice we pass 'query' down now, NOT 'searchTerm' */}
+        <MovieList searchTerm={query} />
       </div>
     </div>
   );
