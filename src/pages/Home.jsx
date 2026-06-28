@@ -3,35 +3,47 @@ import MovieList from "../components/MovieList";
 
 function Home() {
   const [searchTerm, setSearchTerm] = useState("batman");
-  const [query, setQuery] = useState("batman"); // The debounced word
+  const [query, setQuery] = useState("batman");
 
-  // The Debounce Magic: Only update the 'query' after 500ms of no typing
   useEffect(() => {
     const timer = setTimeout(() => {
       setQuery(searchTerm);
     }, 500);
-
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white p-8 font-sans">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 mb-8 text-center">
-          🎬 Movie Engine
-        </h1>
+    <div className="min-h-screen bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8 font-sans flex flex-col">
+      <div className="max-w-7xl mx-auto flex-grow w-full">
         
-        <input
-          type="text"
-          placeholder="Search movies (e.g., Avengers, Inception)..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full mb-8 px-6 py-3 rounded-xl bg-slate-800 border border-slate-700 focus:outline-none focus:border-indigo-500 text-lg transition-colors shadow-lg text-white"
-        />
+        {/* PREMIUM HEADER */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-indigo-400 to-cyan-400 text-transparent bg-clip-text">
+            🎬 Movie Engine
+          </h1>
+          <p className="text-slate-400 mt-4 text-lg">
+            Search and explore your favorite movies instantly
+          </p>
+        </div>
+        
+        {/* PREMIUM SEARCH BAR */}
+        <div className="relative mb-12 max-w-3xl mx-auto">
+          <input
+            type="text"
+            placeholder="Search movies (e.g., Avengers, Inception)..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-6 py-4 rounded-2xl bg-slate-800 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg shadow-lg transition-all text-white placeholder-slate-500"
+          />
+        </div>
 
-        {/* Notice we pass 'query' down now, NOT 'searchTerm' */}
         <MovieList searchTerm={query} />
       </div>
+
+      {/* NEW FOOTER */}
+      <footer className="text-center text-slate-500 text-sm mt-16 pb-4">
+        Built by Vitesh • React + Tailwind
+      </footer>
     </div>
   );
 }
