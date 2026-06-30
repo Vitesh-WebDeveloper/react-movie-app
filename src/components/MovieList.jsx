@@ -1,3 +1,4 @@
+// MovieList.jsx
 import { useState, useEffect, useCallback } from "react";
 
 function MovieList({ searchTerm }) {
@@ -49,8 +50,8 @@ function MovieList({ searchTerm }) {
   }, [searchTerm]);
 
   useEffect(() => {
-    fetchMovies();
-  }, [fetchMovies]);
+  fetchMovies();
+}, [fetchMovies]);
 
   // ==========================================
   // RESPONSIVE UI STATES

@@ -1,3 +1,4 @@
+// Home.jsx
 import { useState, useEffect } from "react";
 import MovieList from "../components/MovieList";
 

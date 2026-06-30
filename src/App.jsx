@@ -1,3 +1,4 @@
+// App.jsx
 import Home from "./pages/Home";
 
 function App() {
