@@ -1,12 +1,12 @@
-// MovieList.jsx
 import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 
 function MovieList({ searchTerm }) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchMovies = useCallback(() => {
+  const fetchMovies = useCallback(async () => {
     // 1. INITIAL STATE: If empty, do nothing.
     if (searchTerm.trim() === "") {
       setMovies([]);
@@ -32,26 +32,26 @@ function MovieList({ searchTerm }) {
 
     const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 
-    fetch(`https://www.omdbapi.com/?s=${searchTerm}&apikey=${API_KEY}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.Response === "True") {
-          setMovies(data.Search);
-        } else {
-          setMovies([]);
-        }
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching data: ", err);
-        setError("Failed to fetch movies from the OMDB database.");
-        setIsLoading(false);
-      });
+    try {
+      const response = await fetch(`https://www.omdbapi.com/?s=${searchTerm}&apikey=${API_KEY}`);
+      const data = await response.json();
+      
+      if (data.Response === "True") {
+        setMovies(data.Search);
+      } else {
+        setMovies([]); // OMDB found no movies
+      }
+    } catch (err) {
+      console.error("Error fetching data: ", err);
+      setError("Failed to fetch movies from the OMDB database.");
+    } finally {
+      setIsLoading(false);
+    }
   }, [searchTerm]);
 
   useEffect(() => {
-  fetchMovies();
-}, [fetchMovies]);
+    fetchMovies();
+  }, [fetchMovies]);
 
   // ==========================================
   // RESPONSIVE UI STATES
@@ -129,19 +129,21 @@ function MovieList({ searchTerm }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
       {movies.map((movie) => (
-        <div key={movie.imdbID} className="group bg-slate-800 rounded-2xl overflow-hidden shadow-lg border border-slate-700 hover:shadow-indigo-500/30 hover:-translate-y-2 transition-all duration-500">
-          <div className="overflow-hidden h-96 sm:h-80">
-            <img 
-              src={movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/300x450?text=No+Poster"} 
-              alt={movie.Title} 
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            />
+        <Link to={`/movie/${movie.imdbID}`} key={movie.imdbID}>
+          <div className="group bg-slate-800 rounded-2xl overflow-hidden shadow-lg border border-slate-700 hover:shadow-indigo-500/30 hover:-translate-y-2 transition-all duration-500 h-full flex flex-col">
+            <div className="overflow-hidden h-96 sm:h-80 shrink-0">
+              <img 
+                src={movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/300x450?text=No+Poster"} 
+                alt={movie.Title} 
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            </div>
+            <div className="p-4 md:p-5 flex-grow">
+              <h3 className="text-base md:text-lg font-bold text-white truncate">{movie.Title}</h3>
+              <p className="text-indigo-400 text-xs md:text-sm mt-1">{movie.Year}</p>
+            </div>
           </div>
-          <div className="p-4 md:p-5">
-            <h3 className="text-base md:text-lg font-bold text-white truncate">{movie.Title}</h3>
-            <p className="text-indigo-400 text-xs md:text-sm mt-1">{movie.Year}</p>
-          </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
