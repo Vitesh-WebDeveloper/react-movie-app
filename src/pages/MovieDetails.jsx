@@ -1,3 +1,4 @@
+// MovieDetails
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -10,7 +11,8 @@ function MovieDetails() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Reset scroll to top
+    // DAY 18 UX FIX: Forces the new page to start at the top
+    window.scrollTo(0, 0); 
 
     const fetchMovieDetails = async () => {
       if (!navigator.onLine) {
@@ -21,7 +23,6 @@ function MovieDetails() {
 
       try {
         const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
-        // Notice we use '?i=' instead of '?s=' to search by ID!
         const response = await fetch(`https://www.omdbapi.com/?i=${id}&apikey=${API_KEY}`);
         const data = await response.json();
 
