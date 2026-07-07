@@ -2,7 +2,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 
-// DAY 19 REFACTOR: We extracted the HTML for a single movie into its own clean Component!
 function MovieCard({ movie }) {
   return (
     <Link 
@@ -152,7 +151,6 @@ function MovieList({ searchTerm }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
       {movies.map((movie) => (
-        // DAY 19 REFACTOR: Calling the mini-component here!
         <MovieCard key={movie.imdbID} movie={movie}/>
       ))}
     </div>
