@@ -20,6 +20,8 @@ Empty state guidance
 
 🔒 Secure API key management via Environment Variables
 
+🛣️ Multi-page routing using React Router DOM
+
 🛠 Tech Stack
 
 React (Hooks: useState, useEffect, useCallback)
@@ -34,9 +36,9 @@ OMDB API
 
 🌐 Live Links
 
-Live Demo: https://react-movie-app-alpha-eight.vercel.app/
+Live Demo: [Insert your Vercel Link Here]
 
-🎥 Watch My 1-Minute Demo Video: ( https://www.linkedin.com/posts/pulluri-sai-vitesh-b55355413_reactjs-tailwindcss-frontenddeveloper-ugcPost-7477263806226935808-fyab/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAGk8kTEBBwj8g5rl0FWpf8v9SrOVZQk8puw )
+🎥 Watch My 1-Minute Demo Video: [Insert your LinkedIn Post Link Here]
 
 🧠 What I Learned
 
@@ -46,4 +48,6 @@ Handling real-world API failures and offline states
 
 Building production-level UI states and layouts
 
-Multi-page architecture using React Router
+Multi-page architecture and URL parameters
+
+Component Refactoring for cleaner code
