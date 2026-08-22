@@ -36,9 +36,9 @@ OMDB API
 
 🌐 Live Links
 
-Live Demo: [Insert your Vercel Link Here]
+Live Demo: [ https://react-movie-app-alpha-eight.vercel.app/ ]
 
-🎥 Watch My 1-Minute Demo Video: [Insert your LinkedIn Post Link Here]
+🎥 Watch My 1-Minute Demo Video: [ https://www.linkedin.com/feed/update/urn:li:activity:7477264017170948096/ ]
 
 🧠 What I Learned
 
